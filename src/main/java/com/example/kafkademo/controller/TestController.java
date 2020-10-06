@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
@@ -59,13 +60,16 @@ public class TestController {
 
     // 监听消息
     @KafkaListener(id = "webGroup", topics = "topic_input",concurrency = "3",errorHandler = "myErrorHandler")
-    public void listen(String input) {
+    public void listen(String input, Acknowledgment acknowledgment) {
         System.out.println("input value: "+ input);
         try {
             Thread.sleep(10*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //手动提交偏移量
+        acknowledgment.acknowledge();
+
     }
 
     //创建topic
