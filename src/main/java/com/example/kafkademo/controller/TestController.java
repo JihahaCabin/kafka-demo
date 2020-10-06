@@ -58,7 +58,7 @@ public class TestController {
     }
 
     // 监听消息
-    @KafkaListener(id = "webGroup", topics = "topic_input",concurrency = "3")
+    @KafkaListener(id = "webGroup", topics = "topic_input",concurrency = "3",errorHandler = "myErrorHandler")
     public void listen(String input) {
         System.out.println("input value: "+ input);
         try {
